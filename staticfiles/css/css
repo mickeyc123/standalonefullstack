@@ -1,0 +1,13 @@
+.logo{
+	margin-bottom: 10px;
+}
+
+.home {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+	background-image: url('{% static "/images/650x350_fast_food_smarts_rmq_HxucYQs.jpg" %}');
+	background-size: cover;
+}
