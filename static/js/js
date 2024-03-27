@@ -1,2 +1,0 @@
-
-    document.querySelector('#test').innerHTML = '<h2>makingfood</h2>';
