@@ -1,19 +1,40 @@
 {% extends 'food/base.html' %}
+{% load static %}
 
 {% block title %} Pizzas {% endblock %}
 
 {% block content %}
+<div class="container">
+    <div class="row">
+        {% for pizza in pizzas %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="{{ pizza.image.url }}" class="card-img-top" alt="{{ pizza.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ pizza.name }}</h5>
+                    <p class="card-text">{{ pizza.description }}</p>
 
-{% for pizza in pizzas %}
-<div class="card" style="width: 18rem;">
-    <img src="{{ pizza.image.url }}" class="card-img-top" alt="{{ pizza.name }}">
-    <div class="card-body">
-        <h5 class="card-title">{{ pizza.name }}</h5>
-        <p class="card-text">{{ pizza.description }}</p>
-        <p class="card-text">Price (Medium): ${{ pizza.price_m }}</p>
-        <p class="card-text">Price (Large): ${{ pizza.price_l }}</p>
+                    <!-- Size Selection -->
+                    <div class="form-group">
+                        <label>Select Size:</label><br>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="size{{ pizza.id }}" id="medium{{ pizza.id }}" value="medium" checked>
+                            <label class="form-check-label" for="medium{{ pizza.id }}">Medium - &pound;{{ pizza.price_m }}</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="size{{ pizza.id }}" id="large{{ pizza.id }}" value="large">
+                            <label class="form-check-label" for="large{{ pizza.id }}">Large - &pound;{{ pizza.price_l }}</label>
+                        </div>
+                    </div>
+
+                    <!-- Add to Cart Button -->
+                    <button class="btn btn-primary btn-sm add-to-cart" data-pizza-id="{{ pizza.id }}">
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
     </div>
 </div>
-{% endfor %}
-
 {% endblock %}
