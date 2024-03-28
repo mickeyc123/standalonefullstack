@@ -1,3 +1,19 @@
 {% extends 'food/base.html' %}
 
 {% block title %} Pizzas {% endblock %}
+
+{% block content %}
+
+{% for pizza in pizzas %}
+<div class="card" style="width: 18rem;">
+    <img src="{{ pizza.image.url }}" class="card-img-top" alt="{{ pizza.name }}">
+    <div class="card-body">
+        <h5 class="card-title">{{ pizza.name }}</h5>
+        <p class="card-text">{{ pizza.description }}</p>
+        <p class="card-text">Price (Medium): ${{ pizza.price_m }}</p>
+        <p class="card-text">Price (Large): ${{ pizza.price_l }}</p>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}
