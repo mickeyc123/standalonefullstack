@@ -11,7 +11,7 @@
             <div class="card h-100">
                 <img src="{{ pizza.image.url }}" class="card-img-top" alt="{{ pizza.name }}">
                 <div class="card-body">
-                    <h5 class="card-title">{{ pizza.name }}</h5>
+                    <h5 class="card-title" id="piz{{ pizza.id }}">{{ pizza.name }}</h5>
                     <p class="card-text">{{ pizza.description }}</p>
 
                     <!-- Size Selection -->
@@ -28,13 +28,30 @@
                     </div>
 
                     <!-- Add to Cart Button -->
-                    <button class="btn btn-primary btn-sm add-to-cart" data-pizza-id="{{ pizza.id }}">
+                    <button class="btn btn-primary btn-sm add-to-cart"
+                            data-type="pizza"
+                            data-id="{{ pizza.id }}"
+                            data-name="{{ pizza.name }}"
+                            data-price="{{ pizza.price }}"
+                            data-price-m="{{ pizza.price_m }}"
+                            data-price-l="{{ pizza.price_l }}"
+                            data-image="{{ pizza.image.url }}">
                         Add to Cart
                     </button>
+
                 </div>
             </div>
         </div>
         {% endfor %}
+    </div>
+    <div class="col-md-4 orders">
+        <div class="bg-info p-4 rounded">
+            <div class="col-md-12">
+                <h2>Order List</h2>
+                <ul id="order-list"></ul>
+                <h2>Total &pound;<span id="order-total">0</span></h2>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
