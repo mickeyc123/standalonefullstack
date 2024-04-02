@@ -18,12 +18,12 @@
                     <div class="form-group">
                         <label>Select Size:</label><br>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="size{{ burger.id }}" id="medium{{ burger.id }}" value="medium" checked>
-                            <label class="form-check-label" for="medium{{ burger.id }}">Medium - &pound;{{ burger.price_m }}</label>
+                            <input class="form-check-input" type="radio" name="size{{ burger.id }}" id="medium{{ burger.id }}" value="M" checked>
+                            <label class="form-check-label" for="medium{{ burger.id }}">M - &pound;{{ burger.price_m }}</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="size{{ burger.id }}" id="large{{ burger.id }}" value="large">
-                            <label class="form-check-label" for="large{{ burger.id }}">Large - &pound;{{ burger.price_l }}</label>
+                            <input class="form-check-input" type="radio" name="size{{ burger.id }}" id="large{{ burger.id }}" value="L">
+                            <label class="form-check-label" for="large{{ burger.id }}">L - &pound;{{ burger.price_l }}</label>
                         </div>
                     </div>
 
@@ -36,11 +36,8 @@
                             data-price-m="{{ burger.price_m }}"
                             data-price-l="{{ burger.price_l }}"
                             data-image="{{ burger.imageb.url }}">
-                        Add Burger to Cart
+                        Add Burger
                     </button>
-
-
-
                 </div>
             </div>
         </div>
@@ -56,6 +53,4 @@
         </div>
     </div>
 </div>
-
-
 {% endblock %}

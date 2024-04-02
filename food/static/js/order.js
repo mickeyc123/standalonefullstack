@@ -4,22 +4,30 @@ document.addEventListener('DOMContentLoaded', function () {
     var total = 0;
     const orderList = document.getElementById("order-list");
     const orderTotal = document.getElementById("order-total");
-    const cartCount = document.getElementById("pcart");
 
     // Function to render the cart
     function renderCart() {
         orderList.innerHTML = "";
+
         cart.forEach((item, index) => {
             const li = document.createElement("li");
-            li.innerHTML = `<img src="${item.image}" width="50" height="50"> ${item.name} - &pound;${item.price.toFixed(2)}
-                        <button class="remove-item-btn" data-index="${index}">Remove</button>`; // Added "Remove" button
+            let sizeText = '';
+            if (item.size) {
+                sizeText = `Size: ${item.size} (${item.sizeLetter})`; // Display size with size letter
+            }
+            li.innerHTML = `
+                <img src="${item.image}" width="50" height="50">
+                <span>${item.name}</span>
+                <span>${sizeText}</span>
+                <span>&pound;${item.price.toFixed(2)}</span>
+                <button class="remove-item-btn" data-index="${index}">Remove</button>`;
             orderList.appendChild(li);
         });
+
         orderTotal.textContent = total.toFixed(2);
-        cartCount.textContent = cart.length;
-        saveCartToStorage();
-        attachRemoveButtonEvents(); // Ensures event listeners are attached
+        attachRemoveButtonEvents();
     }
+
     function attachRemoveButtonEvents() {
         document.querySelectorAll('.remove-item-btn').forEach(button => {
             button.addEventListener('click', function (event) {
@@ -28,23 +36,27 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
+
     function removeFromCart(index) {
         if (index >= 0 && index < cart.length) {
-            total -= cart[index].price; // Deduct the price of the removed item from the total
-            cart.splice(index, 1); // Remove the item from the cart
-            renderCart(); // Re-render the cart to reflect the change
+            total -= cart[index].price;
+            cart.splice(index, 1);
+            renderCart();
         }
     }
 
     // Function to handle adding items to cart
-    function addToCart(type, id, name, price, image) {
-        cart.push({ type, id, name, price, image });
+    function addToCart(type, id, name, price, image, size) {
+        let sizeLetter = ''; // Default size letter
+        if (size === 'M') {
+            sizeLetter = 'M'; // If size is 'M', set size letter to 'M'
+        } else if (size === 'L') {
+            sizeLetter = 'L'; // If size is 'L', set size letter to 'L'
+        }
+        cart.push({ type, id, name, price, size, sizeLetter, image });
         total += price;
         renderCart();
     }
-
-    // Function to handle removing items from cart
-    // Presumably implemented elsewhere or to be implemented
 
     // Event listener for "Add to Cart" buttons
     document.querySelectorAll('.add-to-cart').forEach(button => {
@@ -55,16 +67,24 @@ document.addEventListener('DOMContentLoaded', function () {
             let price = parseFloat(this.getAttribute('data-price'));
             const image = this.getAttribute('data-image');
 
-            if (['pizza', 'burger'].includes(type)) {
-                const size = document.querySelector(`input[name="size${id}"]:checked`).value;
-                price = parseFloat(this.getAttribute(`data-price-${size.charAt(0)}`));
-            }
+            // Get the selected size ('M' or 'L')
+            let size = 'M'; // Default size to 'M'
+            const sizeRadioButtons = document.querySelectorAll(`input[name="size${id}"]`);
+            sizeRadioButtons.forEach(radioButton => {
+                if (radioButton.checked) {
+                    size = radioButton.value;
+                    // Update price based on size
+                    if (size === 'M') {
+                        price = parseFloat(this.getAttribute('data-price-m'));
+                    } else if (size === 'L') {
+                        price = parseFloat(this.getAttribute('data-price-l'));
+                    }
+                }
+            });
 
-            addToCart(type, id, name, price, image);
+            addToCart(type, id, name, price, image, size);
         });
     });
-
-    cartCount.textContent = cart.length;
 
     // Local Storage functions
     function saveCartToStorage() {
@@ -91,3 +111,4 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initialize cart from localStorage
     loadCartFromStorage();
 });
+    
