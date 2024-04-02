@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         orderTotal.textContent = total.toFixed(2);
         attachRemoveButtonEvents();
+        updateCartCount(); // Update the cart count display
     }
 
     function attachRemoveButtonEvents() {
@@ -42,6 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
             total -= cart[index].price;
             cart.splice(index, 1);
             renderCart();
+            saveCartToStorage(); // Save the updated cart to local storage
         }
     }
 
@@ -56,6 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
         cart.push({ type, id, name, price, size, sizeLetter, image });
         total += price;
         renderCart();
+        saveCartToStorage(); // Save the updated cart to local storage
     }
 
     // Event listener for "Add to Cart" buttons
@@ -86,6 +89,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // Function to update the cart count display
+    function updateCartCount() {
+        const cartCount = document.getElementById("pcart");
+        cartCount.textContent = cart.length;
+    }
+
     // Local Storage functions
     function saveCartToStorage() {
         localStorage.setItem('cart', JSON.stringify(cart));
@@ -111,4 +120,3 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initialize cart from localStorage
     loadCartFromStorage();
 });
-    
