@@ -15,7 +15,7 @@ function shoppingCart() {
     var totalPrice = 0; // Initialize total price variable
 
     for (let i = 0; i < cartSize; i++) {
-        var button = '<div class="del" onclick="removeItem(' + i + ')">x</div>';
+        var button = '<button class="del" onclick="removeItem(' + i + ')">Remove</button>';
         nameElement.innerHTML += '<h4>' + orders[i].name + '</h4>';
         let sizeText = '';
         if (orders[i].size) {
@@ -31,6 +31,19 @@ function shoppingCart() {
 
     // Update the total in localStorage as well
     localStorage.setItem('total', totalPrice.toFixed(2));
+}
+
+function removeItem(index) {
+    var orders = JSON.parse(localStorage.getItem('cart'));
+
+    // Remove the item from the orders array
+    orders.splice(index, 1);
+
+    // Save the updated orders array back to localStorage
+    localStorage.setItem('cart', JSON.stringify(orders));
+
+    // Call shoppingCart again to update the display
+    shoppingCart();
 }
 
 document.addEventListener('DOMContentLoaded', function () {
