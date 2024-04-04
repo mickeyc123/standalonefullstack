@@ -7,6 +7,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Function to render the cart
     function renderCart() {
+        if (!orderList || !orderTotal) {
+            console.error('orderList or orderTotal element not found.');
+            return;
+        }
+
         orderList.innerHTML = "";
 
         cart.forEach((item, index) => {

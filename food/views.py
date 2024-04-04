@@ -1,5 +1,5 @@
 from email.utils import collapse_rfc2231_value
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from .models import Pizza, Burger, Order
 from django.views.decorators.csrf import csrf_exempt
@@ -24,21 +24,24 @@ def order(request):
     return render(request, 'food/order.html', ctx)
 
 def submit_order(request):
-    # Set session expiry
-    request.session.set_expiry(0)
-    
     if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        # This is an AJAX POST request
+        # Get the 'note' and 'orders' data from the POST request
         note = request.POST.get('note')
         orders = request.POST.get('orders')
 
-        request.session['note'] = note
-        request.session['orders'] = orders
+        # In this example, we assume 'orders' is sent as JSON string, so parse it
+        import json
+        orders_list = json.loads(orders)
 
-        # You can add additional logic here if needed
-        
-        # Return a success message
-        return JsonResponse({'message': 'Order successfully submitted'})
+        # Create an Order instance and save it (this is a simplified example)
+        # You would typically handle the order data according to your models
+        # Here, we're just returning a success message
+        Order.objects.create(note=note, orders=orders_list)
 
-    # If it's not an AJAX request, return an error
-    return JsonResponse({'error': 'Invalid request'})
+        # Redirect to the success page
+    return render(request, 'food/success.html')
+
+
+
+def success(request):
+    return render(request, 'food/success.html')
