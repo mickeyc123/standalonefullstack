@@ -1,6 +1,9 @@
+from email.utils import collapse_rfc2231_value
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from .models import Pizza, Burger, Order
+from django.views.decorators.csrf import csrf_exempt
+
 
 def index(request):
     ctx = {'name': 'welcome to our food'}
@@ -17,5 +20,25 @@ def burger(request):
     return render(request, 'food/burger.html', ctx)
 
 def order(request):
+    ctx = {'active_link': 'order'}
+    return render(request, 'food/order.html', ctx)
+@csrf_exempt
+def order(request):
+    request.session.set_expiry(0)
+    
+    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        # This is an AJAX POST request
+        note = request.POST.get('note')
+        orders = request.POST.get('orders')
+
+        request.session['note'] = note
+        request.session['order'] = orders
+
+        # You can add additional logic here if needed
+        
+        # Return a success message
+        return JsonResponse({'message': 'Order successfully submitted'})
+
+    # If it's not an AJAX request, render the order.html template
     ctx = {'active_link': 'order'}
     return render(request, 'food/order.html', ctx)

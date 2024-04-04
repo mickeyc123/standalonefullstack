@@ -49,3 +49,62 @@ function removeItem(index) {
 document.addEventListener('DOMContentLoaded', function () {
     shoppingCart(); // Call the shoppingCart function when the page loads
 });
+
+
+var note = document.querySelector('#message');
+
+var note = document.querySelector('#message');
+
+function order() {
+    console.log('Order function called');
+
+    var msg = note.value;
+    var orders = localStorage.getItem('orders');
+    console.log('Message:', msg);
+    console.log('Orders:', orders);
+
+    var url = '/food/order/';  // Make sure this matches the URL in urls.py
+    var orderData = {
+        'orders': orders,
+        'note': msg
+    };
+
+    // Get CSRF token from the cookie
+    var csrftoken = getCookie('csrftoken');
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken
+        },
+        data: orderData,
+        success: function (data) {
+            console.log('Order successful:', data);
+            window.location.replace('/food/success/');
+            localStorage.setItem('orders', JSON.stringify([]));
+            localStorage.setItem('total', 0);
+        },
+        error: function (xhr, status, error) {
+            console.error('Error:', xhr.responseText);
+            // Handle errors here
+        }
+    });
+}
+
+// Function to get CSRF token from cookie
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
