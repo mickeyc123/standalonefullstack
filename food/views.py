@@ -22,8 +22,9 @@ def burger(request):
 def order(request):
     ctx = {'active_link': 'order'}
     return render(request, 'food/order.html', ctx)
-@csrf_exempt
-def order(request):
+
+def submit_order(request):
+    # Set session expiry
     request.session.set_expiry(0)
     
     if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
@@ -32,13 +33,12 @@ def order(request):
         orders = request.POST.get('orders')
 
         request.session['note'] = note
-        request.session['order'] = orders
+        request.session['orders'] = orders
 
         # You can add additional logic here if needed
         
         # Return a success message
         return JsonResponse({'message': 'Order successfully submitted'})
 
-    # If it's not an AJAX request, render the order.html template
-    ctx = {'active_link': 'order'}
-    return render(request, 'food/order.html', ctx)
+    # If it's not an AJAX request, return an error
+    return JsonResponse({'error': 'Invalid request'})

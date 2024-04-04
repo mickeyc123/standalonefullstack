@@ -55,22 +55,23 @@ var note = document.querySelector('#message');
 
 var note = document.querySelector('#message');
 
-function order() {
+function orders() {
     console.log('Order function called');
 
-    var msg = note.value;
-    var orders = localStorage.getItem('orders');
+    var msg = document.querySelector('#message').value;
+    var orders = JSON.parse(localStorage.getItem('cart'));
     console.log('Message:', msg);
     console.log('Orders:', orders);
 
-    var url = '/food/order/';  // Make sure this matches the URL in urls.py
+    var url = '/food/submit_order/';
     var orderData = {
         'orders': orders,
         'note': msg
     };
 
-    // Get CSRF token from the cookie
     var csrftoken = getCookie('csrftoken');
+
+    console.log('Order Data:', orderData);
 
     $.ajax({
         url: url,
@@ -78,11 +79,13 @@ function order() {
         headers: {
             'X-CSRFToken': csrftoken
         },
-        data: orderData,
+        data: JSON.stringify(orderData),
+        contentType: 'application/json',
         success: function (data) {
             console.log('Order successful:', data);
-            window.location.replace('/food/success/');
-            localStorage.setItem('orders', JSON.stringify([]));
+            // Redirect to success page after successful order
+            window.location.href = '/food/success/';
+            localStorage.setItem('cart', JSON.stringify([]));
             localStorage.setItem('total', 0);
         },
         error: function (xhr, status, error) {
