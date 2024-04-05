@@ -11,7 +11,5 @@ urlpatterns = [
     path('submit_order/', views.submit_order, name='submit_order'),  
     path('success/', views.success, name='success'),  
     path('signup/', views.signup, name='signup'), 
-    path('login/', views.login, name='login'), 
-
-
+    path('login/', views.login, name='login'),  # Corrected name for the login URL
 ]

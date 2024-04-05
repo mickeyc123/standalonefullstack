@@ -3,40 +3,71 @@
 {% block title %}Signup{% endblock %}
 
 {% block content %}
+
+<style>
+    body {
+        background: #4becbc;
+    }
+</style>
 <div class="container-fluid p-5">
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col-md-6 p-4 bg-dark text-light text-center">
             <h3 class="text">Sign up</h3>
-            <form method="POST">
+            <form method="post">
                 {% csrf_token %}
-
-                {% for field in form %}
                 <div class="form-group">
-                    {{ field.label_tag }}
-
+                    <label for="id_first_name">First Name:</label>
+                    <input type="text" name="first_name" id="id_first_name" required>
                 </div>
-                <div>
-                    {{ field }}
+                <div class="form-group">
+                    <label for="id_last_name">Last Name:</label>
+                    <input type="text" name="last_name" id="id_last_name" required>
                 </div>
-
-                <div>
-                    {% if field.help_text %}
-                    <small style="color:blue">{{ field.help_text}}</small>
-
-                    {% endif %}
-                    {% for error in forms.errors%}
-                    <small style="color:red">{{ error }}</small>
+                <div class="form-group">
+                    <label for="id_house_address">House Address:</label>
+                    <input type="text" name="house_address" id="id_house_address" required>
                 </div>
-
-                {% endfor %}
-                {% endfor %}
-                <button type="submit" class="btn-info">Submit</button>
-
-
+                <div class="form-group">
+                    <label for="id_email">Email Address:</label>
+                    <input type="email" name="email" id="id_email" required>
+                </div>
+                <div class="form-group">
+                    <label for="id_username">Username:</label>
+                    <input type="text" name="username" id="id_username" required>
+                </div>
+                <div class="form-group">
+                    <label for="id_password1">Password:</label>
+                    <input type="password" name="password1" id="id_password1" required>
+                </div>
+                <div class="form-group">
+                    <label for="id_password2">Confirm Password:</label>
+                    <input type="password" name="password2" id="id_password2" required>
+                </div>
+                <button type="submit">Sign Up</button>
             </form>
+            <div class="mt-3">
+                <h5>Password Strength Requirements:</h5>
+                <ul>
+                    <li>At least 8 characters</li>
+                    <li>At least one uppercase letter</li>
+                    <li>At least one lowercase letter</li>
+                    <li>At least one digit</li>
+                    <li>At least one special character (!@#$%^&*)</li>
+                </ul>
+            </div>
+            {% if form.errors %}
+            <ul>
+                {% for field in form %}
+                {% for error in field.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+                {% endfor %}
+            </ul>
+            {% endif %}
         </div>
         <div class="col-md-3"></div>
     </div>
 </div>
+
 {% endblock %}

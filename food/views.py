@@ -6,6 +6,11 @@ from .models import Pizza, Burger, Order
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.views.decorators.csrf import csrf_protect
+from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth.models import User
+from .forms import RegistrationForm
+
+
 
 
 
@@ -53,19 +58,54 @@ def success(request):
     return render(request, 'food/success.html')
 
 def signup(request):
-    ctx = {}
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = RegistrationForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('index') 
-        else:
-            ctx['form'] = form
+            # Extract data from the form
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            house_address = form.cleaned_data['house_address']
+            email = form.cleaned_data['email']
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password1']
+            password = form.cleaned_data['password2']
+
+
+            # Create a new User object
+            user = User.objects.create_user(username=username, password=password)
+            user.first_name = first_name
+            user.last_name = last_name
+            user.email = email
+            user.save()
+
+            # Redirect to index page after successful registration
+            return redirect('food:index')  # Update 'food:index' to your actual index URL name
+
     else:
-        form = UserCreationForm()
-        ctx['form'] = form
+        form = RegistrationForm()
+
+    ctx = {'form': form}
     return render(request, 'food/signup.html', ctx)
 
 def login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        # Authenticate the user
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            # User is authenticated, log them in
+            auth_login(request, user)
+            # Redirect to the index page
+            return redirect('food:index')  # Assuming 'food' is your app_name
+        else:
+            # Invalid credentials, show an error message
+            error_message = "Invalid username or password."
+            ctx = {'error_message': error_message, 'active_link': 'login'}
+            return render(request, 'food/login.html', ctx)
+
     ctx = {'active_link': 'login'}
     return render(request, 'food/login.html', ctx)
+

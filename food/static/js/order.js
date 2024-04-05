@@ -125,3 +125,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initialize cart from localStorage
     loadCartFromStorage();
 });
+
+
+   
