@@ -1,8 +1,12 @@
 from email.utils import collapse_rfc2231_value
+from urllib import request
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from .models import Pizza, Burger, Order
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+from django.views.decorators.csrf import csrf_protect
+
 
 
 def index(request):
@@ -33,15 +37,35 @@ def submit_order(request):
         import json
         orders_list = json.loads(orders)
 
-        # Create an Order instance and save it (this is a simplified example)
-        # You would typically handle the order data according to your models
-        # Here, we're just returning a success message
-        Order.objects.create(note=note, orders=orders_list)
+        # Create an Order instance but do not save yet
+        order = Order(note=note, orders=orders_list)
 
-        # Redirect to the success page
+        # Save the order to the database
+        order.save()
+
+        # Here, you can also send a response if needed, such as a success message
+        # For example, if using AJAX, you can return JSON response
+        return JsonResponse({'message': 'Order submitted successfully!'})
+
     return render(request, 'food/success.html')
-
-
 
 def success(request):
     return render(request, 'food/success.html')
+
+def signup(request):
+    ctx = {}
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('index') 
+        else:
+            ctx['form'] = form
+    else:
+        form = UserCreationForm()
+        ctx['form'] = form
+    return render(request, 'food/signup.html', ctx)
+
+def login(request):
+    ctx = {'active_link': 'login'}
+    return render(request, 'food/login.html', ctx)

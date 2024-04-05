@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+
 
 class Pizza(models.Model):
     name = models.CharField(max_length=255)
@@ -9,7 +11,6 @@ class Pizza(models.Model):
 
     def __str__(self):
         return self.name
-
 
 class Burger(models.Model):
     name = models.CharField(max_length=255)
@@ -22,11 +23,13 @@ class Burger(models.Model):
         return self.name
 
 
+
 class Order(models.Model):
-    pizzas = models.ManyToManyField(Pizza, related_name='orders', blank=True)
-    burgers = models.ManyToManyField(Burger, related_name='orders', blank=True)
-    total_price = models.DecimalField(max_digits=6, decimal_places=2, default=0.00)
-    created_at = models.DateTimeField(auto_now_add=True)
+    note = models.TextField()
+    orders = models.JSONField(default=list)  # Default is an empty list
+    created_at = models.DateTimeField(default=timezone.now)  # Default is current time
+    address = models.CharField(max_length=255, default="")  # Default is empty string
 
     def __str__(self):
         return f"Order {self.id}"
+

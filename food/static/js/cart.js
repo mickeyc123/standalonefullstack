@@ -50,23 +50,22 @@ document.addEventListener('DOMContentLoaded', function () {
     shoppingCart(); // Call the shoppingCart function when the page loads
 });
 
-
-var note = document.querySelector('#message');
-
-var note = document.querySelector('#message');
-
 function orders() {
     console.log('Order function called');
 
     var msg = document.querySelector('#message').value;
     var orders = JSON.parse(localStorage.getItem('cart'));
+    var address = document.querySelector('#address').value; // Get the address field value
+
     console.log('Message:', msg);
     console.log('Orders:', orders);
+    console.log('Address:', address);
 
     var url = '/food/submit_order/';
     var orderData = {
         'orders': orders,
-        'note': msg
+        'note': msg,
+        'address': address // Include address in orderData
     };
 
     var csrftoken = getCookie('csrftoken');
