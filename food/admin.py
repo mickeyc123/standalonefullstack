@@ -31,9 +31,11 @@ class BurgerAdmin(admin.ModelAdmin):
     
     image_preview.short_description = 'Image Preview'
 
+@admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['id', 'note', 'get_orders', 'created_at', 'address']
     search_fields = ['note', 'address']
+    list_filter = ['created_at']
 
     def get_orders(self, obj):
         # Custom method to display orders in a readable format
@@ -45,5 +47,3 @@ class OrderAdmin(admin.ModelAdmin):
             return "Invalid JSON"
 
     get_orders.short_description = 'Orders'
-
-admin.site.register(Order, OrderAdmin)

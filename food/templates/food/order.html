@@ -14,7 +14,7 @@
     <div class="row">
         <div class="col-md-8 text-center">
             <h2>Order</h2>
-            <form action="{% url 'food:submit_order' %}" method="POST" id="order-form">
+            <form action="{% url 'food:submit_order' %}" method="POST" id="order-form" onsubmit="orders(); return false;">
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-md-4" id="name">

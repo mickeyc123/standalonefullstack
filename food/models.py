@@ -25,10 +25,10 @@ class Burger(models.Model):
 
 
 class Order(models.Model):
-    note = models.TextField()
-    orders = models.JSONField(default=list)  # Default is an empty list
-    created_at = models.DateTimeField(default=timezone.now)  # Default is current time
-    address = models.CharField(max_length=255, default="")  # Default is empty string
+    note = models.CharField(max_length=255, default="No notes")
+    orders = models.JSONField(default=list)  
+    created_at = models.DateTimeField(default=timezone.now)  
+    address = models.CharField(max_length=255, default="")  
 
     def __str__(self):
         return f"Order {self.id}"

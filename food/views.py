@@ -2,6 +2,7 @@ from email.utils import collapse_rfc2231_value
 from urllib import request
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
+import json
 from .models import Pizza, Burger, Order
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm

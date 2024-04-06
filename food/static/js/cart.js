@@ -49,7 +49,6 @@ function removeItem(index) {
 document.addEventListener('DOMContentLoaded', function () {
     shoppingCart(); // Call the shoppingCart function when the page loads
 });
-
 function orders() {
     console.log('Order function called');
 
@@ -60,6 +59,12 @@ function orders() {
     console.log('Message:', msg);
     console.log('Orders:', orders);
     console.log('Address:', address);
+
+    // Check if 'orders' is an array
+    if (!Array.isArray(orders)) {
+        console.error("'orders' is not an array or is empty.");
+        return;
+    }
 
     var url = '/food/submit_order/';
     var orderData = {
@@ -94,19 +99,6 @@ function orders() {
     });
 }
 
-// Function to get CSRF token from cookie
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
+document.addEventListener('DOMContentLoaded', function () {
+    shoppingCart(); // Call the shoppingCart function when the page loads
+});
