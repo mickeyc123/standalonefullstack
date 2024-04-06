@@ -78,22 +78,23 @@ function orders() {
     console.log('Order Data:', orderData);
 
     $.ajax({
-        url: url,
-        type: 'POST',
+        url: url,  // URL where the order will be submitted
+        type: 'POST',  // POST request
         headers: {
-            'X-CSRFToken': csrftoken
+            'X-CSRFToken': csrftoken  // CSRF token for security
         },
-        data: JSON.stringify(orderData),
-        contentType: 'application/json',
+        data: JSON.stringify(orderData),  // Order data in JSON format
+        contentType: 'application/json',  // Content type is JSON
         success: function (data) {
-            console.log('Order successful:', data);
+            console.log('Order successful:', data);  // Log success message
             // Redirect to success page after successful order
             window.location.href = '/food/success/';
+            // Clear cart and total from localStorage
             localStorage.setItem('cart', JSON.stringify([]));
             localStorage.setItem('total', 0);
         },
         error: function (xhr, status, error) {
-            console.error('Error:', xhr.responseText);
+            console.error('Error:', xhr.responseText);  // Log error message
             // Handle errors here
         }
     });

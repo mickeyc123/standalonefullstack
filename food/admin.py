@@ -40,10 +40,10 @@ class OrderAdmin(admin.ModelAdmin):
     def get_orders(self, obj):
         # Custom method to display orders in a readable format
         try:
-            orders_list = json.loads(obj.orders)
+            orders_list = obj.orders
             orders_str = ", ".join([f"{order['item']} x{order['quantity']}" for order in orders_list])
             return orders_str
-        except json.JSONDecodeError:
-            return "Invalid JSON"
+        except (TypeError, KeyError):
+            return "Invalid Orders"
 
     get_orders.short_description = 'Orders'
