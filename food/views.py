@@ -38,11 +38,12 @@ def order(request):
 def submit_order(request):
     if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         note = request.POST.get('note')
+        address = request.POST.get('address')
         orders = request.POST.get('orders')
 
         try:
             orders_list = json.loads(orders)
-            order = Order(note=note, orders=orders_list)
+            order = Order.objects.create(note=note, address=address, orders=orders_list)
             order.save()
 
             return JsonResponse({'message': 'Order submitted successfully!'})

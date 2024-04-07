@@ -78,7 +78,7 @@ function orders() {
     console.log('Order Data:', orderData);
 
     $.ajax({
-        url: url,  // URL where the order will be submitted
+        url:'/food/submit_order',  // URL where the order will be submitted
         type: 'POST',  // POST request
         headers: {
             'X-CSRFToken': csrftoken  // CSRF token for security

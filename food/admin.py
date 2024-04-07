@@ -2,6 +2,8 @@ from django.contrib import admin
 from django.utils.html import mark_safe
 from .models import Pizza, Burger, Order
 import json
+from django.http import JsonResponse
+from django.shortcuts import render
 
 @admin.register(Pizza)
 class PizzaAdmin(admin.ModelAdmin):
@@ -30,8 +32,6 @@ class BurgerAdmin(admin.ModelAdmin):
             return 'No Image'
     
     image_preview.short_description = 'Image Preview'
-
-@admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['id', 'note', 'get_orders', 'created_at', 'address']
     search_fields = ['note', 'address']
@@ -45,5 +45,7 @@ class OrderAdmin(admin.ModelAdmin):
             return orders_str
         except (TypeError, KeyError):
             return "Invalid Orders"
+    
+    get_orders.short_description = 'Orders'  # Set a custom header for this column
 
-    get_orders.short_description = 'Orders'
+admin.site.register(Order, OrderAdmin)
