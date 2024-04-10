@@ -1,2 +1,2 @@
-web: gunicorn finalassignment.wsgi:application
+web: gunicorn food.wsgi:application
 
