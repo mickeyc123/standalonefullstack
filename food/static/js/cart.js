@@ -11,7 +11,7 @@ function shoppingCart() {
 
     nameElement.textContent = 'Name';
     sizeElement.textContent = 'Size';
-    priceElement.textContent = 'Price (£)';
+    priceElement.innerHTML = 'Price &pound;';
 
     var totalPrice = 0; // Initialize total price variable
 
@@ -20,12 +20,12 @@ function shoppingCart() {
         nameElement.innerHTML += '<h4>' + orders[i].name + '</h4>';
         let sizeText = orders[i].size === 'M' ? 'Medium' : 'Large';
         sizeElement.innerHTML += '<h4>' + sizeText + '</h4>';
-        priceElement.innerHTML += '<h4>£' + orders[i].price.toFixed(2) + button + '</h4>';
+        priceElement.innerHTML += '<h4> &pound;' + orders[i].price.toFixed(2) + button + '</h4>';
 
         totalPrice += orders[i].price; // Add current item's price to total
     }
 
-    billElement.innerHTML = '<h2>Total: £' + totalPrice.toFixed(2) + '</h2>'; // Display total price
+    billElement.innerHTML = '<h2>Total: &pound;' + totalPrice.toFixed(2) + '</h2>'; // Display total price
 
     // Update the total in localStorage as well
     localStorage.setItem('total', totalPrice.toFixed(2));
@@ -92,7 +92,7 @@ function orders() {
     console.log('Order Data:', orderData);
 
     $.ajax({
-        url: url ,
+        url: url,
         type: 'POST',
         headers: {
             'X-CSRFToken': csrftoken

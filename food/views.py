@@ -1,11 +1,7 @@
-from email.utils import collapse_rfc2231_value
-from urllib import request
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from .models import Pizza, Burger, Order
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.forms import UserChangeForm, UserCreationForm
-from django.views.decorators.csrf import csrf_protect
+from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.models import User
 from .forms import RegistrationForm
