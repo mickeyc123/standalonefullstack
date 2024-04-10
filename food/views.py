@@ -11,6 +11,11 @@ from django.contrib.auth.models import User
 from .forms import RegistrationForm
 import json
 from django.http import JsonResponse
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+
 
 
 
@@ -35,24 +40,26 @@ def order(request):
     ctx = {'active_link': 'order'}
     return render(request, 'food/order.html', ctx)
 
+
+
 def submit_order(request):
     if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        note = request.POST.get('note')
-        address = request.POST.get('address')
-        orders = request.POST.get('orders')
+        data = json.loads(request.body)
+        note = data.get('note')
+        address = data.get('address')
+        orders = data.get('orders')
 
         try:
-            orders_list = json.loads(orders)
+            orders_list = orders
             order = Order.objects.create(note=note, address=address, orders=orders_list)
             order.save()
 
             return JsonResponse({'message': 'Order submitted successfully!'})
-        except json.JSONDecodeError:
-            return JsonResponse({'error': 'Invalid JSON format for orders.'}, status=400)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
 
-    return render(request, 'food/success.html')
+    return redirect('food:success')
+
 
 def success(request):
     return render(request, 'food/success.html')
@@ -109,3 +116,45 @@ def login(request):
     ctx = {'active_link': 'login'}
     return render(request, 'food/login.html', ctx)
 
+def logout_view(request):
+    logout(request)
+    return redirect('food:index')
+
+def edit(request):
+    return render(request, 'food/edit.html')
+
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        user_form = UserChangeForm(request.POST, instance=request.user)
+        if user_form.is_valid():
+            user_form.save()
+            return redirect('food:index')  # Redirect to index page
+    else:
+        user_form = UserChangeForm(instance=request.user)
+    
+    return render(request, 'food/edit.html', {'user_form': user_form})
+
+@login_required
+def update_profile(request):
+    if request.method == 'POST':
+        password_form = PasswordChangeForm(request.user, request.POST)
+        if password_form.is_valid():
+            user = password_form.save()
+            update_session_auth_hash(request, user)  # Update session to prevent logout
+            return redirect('food:index')  # Redirect to index page
+    else:
+        password_form = PasswordChangeForm(request.user)
+    
+    return render(request, 'food/edit.html', {'password_form': password_form})
+
+def delete_account(request):
+    if request.method == 'POST':
+        # Perform deletion logic here
+        user = request.user
+        user.delete()
+        logout(request)  # Logout the user after deleting the account
+        return redirect('food:index')  # Redirect to index or another page
+    else:
+        # Render a confirmation page if GET request
+        return render(request, 'food/edit.html')
