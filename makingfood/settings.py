@@ -9,8 +9,9 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
+from pathlib import Path
 import os
-from pathlib import Path, PurePath
+from unittest.mock import DEFAULT
 import django_heroku
 import dj_database_url
 
@@ -129,19 +130,12 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-MEDIA_URL = '/media/'
 
 
-STATIC_URL = '/static/'
 
 # Define the STATIC_ROOT setting
-STATIC_ROOT = Path.PurePath.joinpath(BASE_DIR),'staticfiles'
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 
 django_heroku.settings(locals())
