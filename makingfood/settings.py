@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 from pathlib import Path
 import os
+from pickle import FALSE, TRUE
 from unittest.mock import DEFAULT
 import django_heroku
 import dj_database_url
@@ -28,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-mxrd_zwfl*3gv0083j^i_t629^aiy69ntgtoh$erfz%r!e)f9f'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = FALSE
 
 ALLOWED_HOSTS = ['localhost:8000','fullstackstandalone-dacf13236bb7.herokuapp.com']
 
